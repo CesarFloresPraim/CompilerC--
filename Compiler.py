@@ -2,15 +2,6 @@ from pprint import pprint
 
 tablaHeader = ["letter", "digit", "+", "-", "/", "*", "<", ">", "=", "!", ";", ",", "(", ")", "[", "]", "{", "}", " ", "\n"]
 
-# tablaTransicion = {
-#     0: [1, 2, 9, 10, 5, 11, 12, 13, 14, 15, 17, 18, 19, 20, 21, 22, 23, 24, 0, 0],
-#     1: [1, 25, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6],
-#     2: [25, 2, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7],
-#     3: [3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
-#     4: [3, 3, 3, 3, 8, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
-#     5: [25, 25, 25, 25, 25, 3, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25]
-# }
-
 tablaTransicion = {
     0:	[1,	2,	14,	15,	5,	16,	6,	7,	8,	9,	18,	19,	20,	21,	22,	23,	24,	25,	0,	0,	0],
     1:	[1, 25,	10,	10,	10,	10,	10,	10,	10,	10,	10,	10,	10,	10,	10,	10,	10,	10,	10,	6,	6],
@@ -39,6 +30,13 @@ tablaTokens = []
 tablaStrings = []
 tablaNumeros = []
 
+mensajesError = []
+testCases = {
+    "/*AB/C */ if (4  <5){var =46  /": False,
+    "/*AB/C */ if (4  <5){var =46  /;": True,
+    "/* x= 34 <=": False,
+    "if (4$  <5){var =46": False,
+}
 #Check errors on table size
 for fila in tablaTransicion.values():
      if len(fila) != 21:
@@ -93,7 +91,12 @@ class Estado:
             return self.setEstadoValor(self.getEstadoAcutal(), aceptacion)
 
         #Transiscion posible
-        nuevoEstado = tablaTransicion[self.getEstadoAcutal()][simbolo]
+        try:
+             nuevoEstado = tablaTransicion[self.getEstadoAcutal()][simbolo]
+        except KeyError:
+            nuevoEstado = 30
+            print("Error: unexpected token '{1}' after '{0}'".format(self.lecturaActual,simbolo))
+
         aceptacion = True if nuevoEstado in estadosAceptacion else False
 
         #mando a tablas
@@ -152,21 +155,36 @@ class Estado:
 
 
 def main():
+    global tablaTokens
+    global tablaStrings
+    global tablaNumeros
+    
     estado = Estado()
     print("\n")
-    codigo = """/*AB/C */ if (4  <5){var =46 /;>="""
-    code2 = "if(4<5){var =46;"
+    for testCase, value in testCases.iteritems():
+        print(testCase)
+        for simbolo in testCase:
+            estado.transicion(simbolo)
+        if estado.getEstadoAcutal() in [3,4]:
+            print('Error: Reached EOF and comment closing token missing ')
+        #Unexpected end of file
+        if estado.getEstadoAcutal() in [1,2,5,6,7,8,9]:
+            print("Error: Unexpected EOF found '{0}' not in acceptance state, missing delimiter after".format(estado.lecturaActual))
+        
+        estado.setEstadoValor(0,False)
 
-    for simbolo in codigo:
-        estado.transicion(simbolo)
-    print("___Tabla de tokens___")
-    pprint(tablaTokens)
-    print("\n")
-    print("___Tabla de strings___")
-    pprint(tablaStrings)
-    print("\n")
-    print("___Tabla de numeros___")
-    pprint(tablaNumeros)
-    print("\n")
+        print("___Tabla de tokens___")
+        pprint(tablaTokens)
+        print("\n")
+        print("___Tabla de strings___")
+        pprint(tablaStrings)
+        print("\n")
+        print("___Tabla de numeros___")
+        pprint(tablaNumeros)
+        print("\n")
+
+        tablaTokens = []
+        tablaStrings = []
+        tablaNumeros = []
 if __name__ == "__main__":
     main()
