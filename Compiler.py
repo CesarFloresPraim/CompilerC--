@@ -32,10 +32,9 @@ tablaNumeros = []
 
 mensajesError = []
 testCases = {
-    "/*AB/C */ if (4  <5){var =46  /": False,
-    "/*AB/C */ if (4  <5){var =46  /;": True,
-    "/* x= 34 <=": False,
-    "if (4$  <5){var =46": False,
+    """/*AB/C */ if (4  <
+    =5){var =46  /; void cesar(x){if variable  = 221}""": True,
+
 }
 #Check errors on table size
 for fila in tablaTransicion.values():
@@ -140,7 +139,7 @@ class Estado:
         #Otro caracter
         else:
             #Si el simbolo es espacio no append
-            if simbolo != " ":
+            if simbolo != " " and simbolo != '\n':
                 self.setLecturaActual(simbolo)
             if nuevoEstado in estadosAceptacion:
                 #Difernete de comment
