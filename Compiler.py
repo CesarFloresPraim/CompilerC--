@@ -83,9 +83,11 @@ while (i < 10){
 output x[i];
 i = i + 1;
 }
-}/* END of main() *//* A program to perform selection sort on a
+}/* END of main() */""": False,
+"""
+/* A program to perform selection sort on a
 10 element array */
-int x[10];
+int x[10);
 int miniloc(int a[], int low, int high){
 int i; int x; int k;
 k = low;
@@ -125,7 +127,8 @@ while (i < 10){
 output x[i];
 i = i + 1;
 }
-}/* END of main() */""": True
+}/* END of main() */
+""":True
 }
 #Check errors on table size
 for fila in tablaTransicion.values():
@@ -898,7 +901,8 @@ class Parser:
             #print("Matched -> ", tokenValue,", against -> ", self.currentTokenValue)
             self.nextToken()
         else:
-            print("Not matched -> ", tokenValue,", against -> ", self.currentTokenValue)
+            print("Token not matched -> ", tokenValue,", expected token was -> ", self.currentTokenValue)
+            self.error = True
 
     def nextToken(self):
         self.currentTokenIndex = self.currentTokenIndex + 1
@@ -915,6 +919,7 @@ def main():
     
     lexer = Lexer()
     parser = Parser()
+
     print("\n")
     for testCase, value in testCases.iteritems():
         #print(testCase)
