@@ -1,0 +1,39 @@
+   1.	declarationList -> int ID declaration declarationListPrime | void ID ( paramsList ) compundStmtVoid declarationListPrime
+   2.	declarationListPrime -> int ID declaration declarationListPrime | void ID ( paramsList ) compundStmtVoid declarationListPrime | epsilon
+   3.	declaration -> varOrArrayDeclaration ; | ( paramsList ) compountStmtNoVoidReturn
+   4.	varOrArrayDeclaration -> [arithmeticExpression]  | epsilon
+   5.	paramsList -> int ID paramVarOrArray paramsListPrime | void
+   6.	paramsListPrime -> , int  ID param_array paramsListPrime | epsilon
+  7.	paramVarOrArray -> [ ] | epsilon
+  8.	compundStmtVoid -> { localDeclarations stmtListVoid }
+  9.	compountStmtNoVoidReturn -> { localDeclarations stmtListNoVoid returnStmtNoVoid }
+  10.	compundStmtNoVoidNoReturn -> { localDeclarations stmtListNoVoid }
+  11.	localDeclarations ->  int ID varOrArrayDeclaration; localDeclarations | epsilon
+  13.	stmtListVoid ->  statement_void stmtListVoid | epsilon
+  14.	stmtListNoVoid ->  stmtNoVoid stmtListNoVoid | epsilon
+  15.	statement_void -> assignmentCallStmt | compundStmtVoid | selectionStmtVoid | loop_stmt_void | ioStmt 
+  16.	stmtNoVoid -> assignmentCallStmt | compundStmtNoVoidNoReturn | selectionStmtNoVoid | loop_stmt_int | returnStmtNoVoid | ioStmt
+  17.	ioStmt -> inputStmt | outputStmt
+  18.	assignmentCallStmt -> ID assignmentCallStmtPrime ;
+  19.	assignmentCallStmtPrime -> varOrArrayDeclaration = expression  | ( args )
+  20.	selectionStmtVoid -> if  ( expression )  statement_void  selectionStmtNoVoidElsePart
+  21.	selectionStmtNoVoidElsePart ->  else  statement_void  | epsilon
+  22.	selectionStmtNoVoid -> if  ( expression )  stmtNoVoid  selectionStmtNoVoidElsePart
+  23.	selectionStmtNoVoidElsePart ->  else  stmtNoVoid  | epsilon
+  24.	loopStmtVoid -> while ( expression )  statement_void
+  25.	loopStmtNoVoid -> while ( expression )  stmtNoVoid
+  26.	returnStmtNoVoid -> return returnStmtNoVoidPrime;
+  27.	returnStmtNoVoidPrime -> expression | epsilon
+  28.	inputStmt -> input ID varOrArrayDeclaration ;
+  29.	outputStmt -> output expression ;
+  30.	expression -> arithmeticExpression expressionPrime
+  31.	expressionPrime -> relop arithmeticExpression | epsilon
+  32.	relop -> <= | < | > | >= | == | !=
+  33.	arithmeticExpression -> term expPrime
+  34.	expPrime ->  + term exp' | - term exp' | epsilon
+  35.	term -> factor termPrime
+  36.	termPrime -> * factor termPrime | / factor termPrime | epsilon
+  37.	factor -> ( arithmeticExpression ) | ID varOrCall | NUM
+  38.	varOrCall -> varOrArrayDeclaration | ( args ) 
+  39.	args -> arithmeticExpression argsList | epsilon
+  40.	argsList -> , arithmeticExpression argsList | epsilon
