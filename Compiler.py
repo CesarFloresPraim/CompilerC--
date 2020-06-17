@@ -251,7 +251,7 @@ class Lexer:
 class Parser:
 
     global tablaTokens
-
+    #Used to keep track of the current token being evaluated by the parser
     def __init__(self):
         self.currentTokenValue = 0
         self.currentTokenType = 0
@@ -260,6 +260,9 @@ class Parser:
 
     def __str__(self):
         return str(self.current_token_value)
+
+#Every of the following procedures are to match all of it production rules. Every procedure has on the first line a comment
+#Showing how the production rule is specified in order the code the corresponding match and methods.
 
 #    1.	declarationList -> int ID declaration declarationListPrime | void ID ( paramsList ) compundStmtVoid declarationListPrime
     def declarationList(self):
@@ -892,7 +895,7 @@ class Parser:
             self.argsList()
         elif (self.currentTokenValue == ")"):
             return
-
+    #Match function checks whether the current token equals the token that is specified to follow on the grammar
     def match(self, tokenValue):
         if (self.currentTokenType == tokenValue):
             #print("Matched Id:", tokenValue,", against -> ", self.currentTokenType)
@@ -903,7 +906,7 @@ class Parser:
         else:
             print("Token not matched -> ", tokenValue,", expected token was -> ", self.currentTokenValue)
             self.error = True
-
+    #After matching a token this function get the new token from the lexer.
     def nextToken(self):
         self.currentTokenIndex = self.currentTokenIndex + 1
         self.currentTokenType = tablaTokens[self.currentTokenIndex]['type']
